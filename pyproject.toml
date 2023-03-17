@@ -1,0 +1,55 @@
+[tool.poetry]
+name = "anqa"
+version = "0.0.1"
+description = ""
+authors = []
+
+[tool.poetry.dependencies]
+python = ">=3.8.1,<4.0"
+
+anqa-core = { path = "packages/anqa-core", develop = true}
+anqa-cli = { path = "packages/anqa-cli", develop = true }
+anqa-db = { path = "packages/anqa-db", develop = true}
+anqa-events = { path = "packages/anqa-events", develop = true}
+anqa-rest = { path = "packages/anqa-rest", develop = true}
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.1"
+pytest-asyncio = "^0.20.2"
+pytest-cov = "^4.0.0"
+mypy = "^0.961"
+black = "^22.3.0"
+flake8 = "^6.0.0"
+isort = "^5.10.1"
+tox = "^3.25.0"
+bandit = "^1.7.4"
+python-semantic-release = "^7.33.2"
+
+
+[tool.poetry.group.docs.dependencies]
+mkdocs = "^1.4.2"
+mkdocs-material = "^8.2.1"
+mkdocs-autorefs = "^0.4.1"
+mkdocs-gen-files = "^0.4.0"
+mkdocstrings-python = "^0.8.2"
+
+[tool.pytest.ini_options]
+addopts = "--cov=./packages"
+testpaths = [
+   "./tests"
+]
+asyncio_mode = "auto"
+
+[tool.mypy]
+python_version = 3.11
+ignore_missing_imports = true
+no_site_packages = true
+exclude = "tests"
+
+[tool.isort]
+profile = "black"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

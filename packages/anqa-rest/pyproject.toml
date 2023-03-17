@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "anqa-rest"
+version = "0.0.1"
+description = ""
+authors = []
+readme = "README.md"
+packages = [
+    { include = "anqa" }
+]
+
+[tool.poetry.dependencies]
+python = ">=3.8.1,<4.0"
+fastapi = "^0.94.1"
+uvicorn = "^0.21.1"
+
+[tool.poetry.group.dev.dependencies]
+anqa-core = { path = "../anqa-core", develop = true}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,40 @@
+name: Test
+on: [push, pull_request]
+jobs:
+  lint:
+    runs-on: ubuntu-20.04
+    name: lint
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+      - run: sudo apt-get update && sudo apt-get install -y curl
+      - run: curl -sSL https://install.python-poetry.org | python3
+      - run: poetry install
+      - run: poetry run flake8 ./packages
+      - run: poetry run black --check ./packages
+      - run: poetry run mypy ./packages
+
+  build-unix:
+    timeout-minutes: 30
+    strategy:
+      matrix:
+        os: ["ubuntu-20.04"]
+        python: ["3.8", "3.9", "3.10", "3.11"]
+
+    runs-on: ${{ matrix.os }}
+    name: test on ${{ matrix.python }} - ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python }}
+      - run: sudo apt-get update && sudo apt-get install -y gcc curl
+      - run: curl -sSL https://install.python-poetry.org | python3
+      - run: poetry install
+      - run: poetry run pytest --cov=./packages --cov-report=xml -v ./tests
+#      - name: upload codecov
+#        if: matrix.python == 3.9
+#        run: bash <(curl -s https://codecov.io/bash)

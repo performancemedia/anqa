@@ -1,0 +1,38 @@
+site_name: "Anqa"
+site_description: Microservice build kit for Python
+theme:
+  name: "material"
+  palette:
+  - scheme: default
+    toggle:
+      icon: material/toggle-switch
+      name: Switch to dark mode
+  - scheme: slate
+    toggle:
+      icon: material/toggle-switch-off-outline
+      name: Switch to light mode
+  features:
+  - search.suggest
+  - search.highlight
+  - content.tabs.link
+repo_name: performancemedia/anqa
+repo_url: https://github.com/performancemedia/anqa
+nav:
+  - "Anqa": index.md
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+
+plugins:
+  - search
+  - autorefs
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_signature_annotations: true
+            docstring_style: sphinx

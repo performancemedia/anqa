@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "anqa-core"
+version = "0.0.1"
+description = ""
+authors = []
+readme = "README.md"
+packages = [
+    { include = "anqa" }
+]
+
+[tool.poetry.dependencies]
+python = ">=3.8.1,<4.0"
+orjson = "^3.8.7"
+pydantic = "^1.10.6"
+uvloop = "^0.17.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

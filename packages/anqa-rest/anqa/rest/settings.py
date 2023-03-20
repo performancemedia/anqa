@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Dict, List, Union
 
 from fastapi import APIRouter
 from pydantic import PyObject
@@ -9,6 +9,6 @@ from anqa.core.utils.imports import ImportedType
 
 
 class ApiSettings(AppSettings):
-    tags_metadata: Union[PyObject, dict[str, str]] = {}
-    side_services: list[AbstractSideService] = []
-    routers: list[ImportedType[APIRouter]] = []
+    tags_metadata: Union[PyObject, Dict[str, str]] = {}
+    side_services: List[AbstractSideService] = []
+    routers: List[ImportedType[APIRouter]] = []

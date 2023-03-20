@@ -1,13 +1,12 @@
 from __future__ import annotations
 
-import functools
 from typing import Any
 
 from fastapi import FastAPI
 
 from anqa.core.abc.service import AbstractSideService
+from anqa.core.utils.class_utils import get_kwargs
 
-from ..core.utils.class_utils import get_kwargs
 from .errors.handlers import add_error_handlers
 from .openapi import simplify_operation_ids
 from .prometheus import add_prometheus_middleware
@@ -23,7 +22,6 @@ def add_side_service(app: FastAPI, service: AbstractSideService):
             app.add_api_route(**e)
 
 
-@functools.cache
 def create_fastapi_app(
     settings: ApiSettings | type[ApiSettings] = ApiSettings, **kwargs: Any
 ) -> FastAPI:

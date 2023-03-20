@@ -4,7 +4,7 @@ from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR
 
 from anqa.core.exceptions import CoreException
 
-from .errors import APIError
+from .exceptions import APIError
 from .models import ErrorDetails
 from .utils import find_model_for_exc
 

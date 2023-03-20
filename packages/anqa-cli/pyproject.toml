@@ -13,7 +13,9 @@ anqa = "anqa.cli.app:cli"
 
 [tool.poetry.dependencies]
 python = ">=3.8.1,<4.0"
+cookiecutter = "^2.1.1"
 typer = "^0.7.0"
+rich = "^13.3.2"
 
 
 [build-system]

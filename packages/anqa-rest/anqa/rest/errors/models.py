@@ -1,9 +1,14 @@
 from typing import Optional
 
 from pydantic import Field
-from starlette.status import HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND, HTTP_409_CONFLICT
+from starlette.status import (
+    HTTP_400_BAD_REQUEST,
+    HTTP_404_NOT_FOUND,
+    HTTP_409_CONFLICT,
+    HTTP_503_SERVICE_UNAVAILABLE,
+)
 
-from anqa.core.exceptions import Duplicate, NotFound
+from anqa.core.exceptions import Duplicate, NotFound, ServiceUnavailable
 from anqa.core.schema import BaseSchema
 
 from .utils import register_for_exc
@@ -41,3 +46,9 @@ class NotFoundAPIError(ErrorDetails):
 class ConflictAPIError(ErrorDetails):
     title: str = Field("Conflict", const=True)
     status: int = Field(HTTP_409_CONFLICT, const=True)
+
+
+@register_for_exc(ServiceUnavailable)
+class ServiceUnavailableAPIError(ErrorDetails):
+    title: str = Field("Service Unavailable", const=True)
+    status: int = Field(HTTP_503_SERVICE_UNAVAILABLE, const=True)

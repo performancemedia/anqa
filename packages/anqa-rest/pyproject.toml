@@ -12,6 +12,7 @@ packages = [
 python = ">=3.8.1,<4.0"
 fastapi = "^0.94.1"
 uvicorn = "^0.21.1"
+starlette-exporter = "^0.15.1"
 
 [tool.poetry.group.dev.dependencies]
 anqa-core = { path = "../anqa-core", develop = true}

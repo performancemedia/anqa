@@ -13,3 +13,7 @@ class NotFound(CoreException):
 
 class Duplicate(CoreException):
     pass
+
+
+class ServiceUnavailable(CoreException):
+    pass

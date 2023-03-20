@@ -1,18 +1,25 @@
 from __future__ import annotations
 
+import inspect
 from typing import Any
 
 
-class Singleton(type):
-    _instances: dict[Singleton, Any] = {}
+class SingletonMeta(type):
+    _instances: dict[SingletonMeta, Any] = {}
 
-    def __call__(cls: Singleton, *args, **kwargs):
+    def __call__(cls: SingletonMeta, *args, **kwargs):
         if cls not in cls._instances:
             cls._instances[cls] = super().__call__(*args, **kwargs)
         return cls._instances[cls]
 
-    def get(cls: Singleton) -> Any | None:
-        return cls._instances.get(cls)
+
+class Singleton(metaclass=SingletonMeta):
+    pass
+
+
+def get_kwargs(cls, dict_obj):
+    worker_args = set(inspect.signature(cls).parameters.keys())
+    return {k: v for k, v in dict_obj.items() if k in worker_args}
 
 
 def classproperty(func):

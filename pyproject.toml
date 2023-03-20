@@ -10,8 +10,9 @@ python = ">=3.8.1,<4.0"
 anqa-core = { path = "packages/anqa-core", develop = true}
 anqa-cli = { path = "packages/anqa-cli", develop = true }
 anqa-db = { path = "packages/anqa-db", develop = true}
-anqa-events = { path = "packages/anqa-events", develop = true}
+anqa-events = { path = "packages/anqa-events", develop = true, extras=["all"]}
 anqa-rest = { path = "packages/anqa-rest", develop = true}
+#python-json-logger = "^2.0.7"
 
 
 [tool.poetry.group.dev.dependencies]

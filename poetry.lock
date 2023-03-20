@@ -237,6 +237,7 @@ develop = true
 
 [package.dependencies]
 fastapi = "^0.94.1"
+starlette-exporter = "^0.15.1"
 uvicorn = "^0.21.1"
 
 [package.source]
@@ -2554,6 +2555,22 @@ typing-extensions = {version = ">=3.10.0", markers = "python_version < \"3.10\""
 
 [package.extras]
 full = ["httpx (>=0.22.0)", "itsdangerous", "jinja2", "python-multipart", "pyyaml"]
+
+[[package]]
+name = "starlette-exporter"
+version = "0.15.1"
+description = "Prometheus metrics exporter for Starlette applications."
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "starlette_exporter-0.15.1-py3-none-any.whl", hash = "sha256:24eeaef01f05ef973984704427f6e6a93d468f487b8b26ad77548d963affc9fe"},
+    {file = "starlette_exporter-0.15.1.tar.gz", hash = "sha256:3bde5d863effb26684210fe016a1ebf2b383efedf21a4b2f28585ec5064f4033"},
+]
+
+[package.dependencies]
+prometheus-client = ">=0.12"
+starlette = "*"
 
 [[package]]
 name = "stevedore"

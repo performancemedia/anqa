@@ -7,6 +7,7 @@ from fastapi import FastAPI
 
 from anqa.core.abc.service import AbstractSideService
 
+from ..core.utils.class_utils import get_kwargs
 from .errors.handlers import add_error_handlers
 from .openapi import simplify_operation_ids
 from .prometheus import add_prometheus_middleware
@@ -24,10 +25,13 @@ def add_side_service(app: FastAPI, service: AbstractSideService):
 
 @functools.cache
 def create_fastapi_app(
-    settings_cls: type[ApiSettings] = ApiSettings, **kwargs: Any
+    settings: ApiSettings | type[ApiSettings] = ApiSettings, **kwargs: Any
 ) -> FastAPI:
-    settings = settings_cls(**kwargs)
-    app = FastAPI(**settings.dict(exclude={"side_services"}))
+    if isinstance(settings, type):
+        settings = settings(**kwargs)
+    kw = {**settings.dict(), **kwargs}
+    filtered_kw = get_kwargs(FastAPI, kw)
+    app = FastAPI(**filtered_kw)
     add_error_handlers(app)
     add_prometheus_middleware(app)
     for side_service in settings.side_services:

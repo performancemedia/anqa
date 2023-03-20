@@ -1,14 +1,16 @@
-from typing import Any, Generic, Type, TypeVar
+from typing import TYPE_CHECKING, Any, Generic, Optional, Type, TypeVar
 
 from pydantic import BaseSettings as _BaseSettings
 from pydantic import Extra, Field, validator
 from pydantic.generics import GenericModel
 
 from anqa.core.logger import setup_logging
-from anqa.core.mixins.builder import AutoBuildableMixin
 from anqa.core.utils.imports import ImportedType
 
-C = TypeVar("C", bound=AutoBuildableMixin)
+if TYPE_CHECKING:
+    from anqa.core.mixins.builder import AutoBuildableMixin
+
+C = TypeVar("C", bound="AutoBuildableMixin")
 
 
 class BaseSettings(_BaseSettings):
@@ -31,7 +33,7 @@ def FromSettings(settings_cls: Type[ObjectSettings], **kwargs: Any):
 class AppSettings(BaseSettings):
     name: str = "app"
     version: str = "0.1.0"
-    title: str
+    title: Optional[str]
     log_level: str = "INFO"
     setup_logging: bool = Field(False, env="CONFIGURE_LOGGING")
     logger_format: str = "%(name) %(level) %(message)"

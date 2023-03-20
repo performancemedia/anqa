@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING, Any, Generic, Optional, Type, TypeVar
 
 from pydantic import BaseSettings as _BaseSettings
 from pydantic import Extra, Field, validator
-from pydantic.generics import GenericModel
 
 from anqa.core.logger import setup_logging
 from anqa.core.utils.imports import ImportedType
@@ -17,13 +16,12 @@ class BaseSettings(_BaseSettings):
     pass
 
 
-class ObjectSettings(BaseSettings, GenericModel, Generic[C]):
-    cls: ImportedType[Type[C]] = Field(..., env="CLASS")
+class ObjectSettings(BaseSettings, Generic[C]):
+    clazz: ImportedType[C] = Field(..., env="CLASS")
 
     @classmethod
     def build(cls):
-        settings = cls()
-        return settings.cls.from_settings(settings)
+        return cls.clazz.from_settings_class(cls)
 
 
 def FromSettings(settings_cls: Type[ObjectSettings], **kwargs: Any):

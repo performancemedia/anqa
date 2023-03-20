@@ -6,10 +6,18 @@ from typing import Any, Generic, Sequence, Type, TypeVar
 import sqlalchemy as sa
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import DeclarativeBase
+from typing_extensions import TypedDict
 
-from .types import OnConflict
+from anqa.core.abc.repository import AbstractRepository, E
 
 M = TypeVar("M", bound=Type[DeclarativeBase])
+
+
+class OnConflict(TypedDict, total=False):
+    index_elements: Any | None
+    index_where: Any | None
+    set_: set[str] | None
+    where: Any | None
 
 
 class BaseSQLAlchemyRepository:
@@ -87,10 +95,10 @@ class BaseSQLAlchemyRepository:
     async def one(self, *args, **kwargs) -> M:
         return (await self.scalars(*args, **kwargs)).one()
 
-    get = one
-
     async def one_or_none(self, *args, **kwargs) -> M | None:
         return (await self.scalars(*args, **kwargs)).one_or_none()
+
+    get = one_or_none
 
     async def mappings(self, *args, **kwargs):
         return (await self.session.execute(*args, **kwargs)).mappings()
@@ -133,7 +141,9 @@ class BaseSQLAlchemyRepository:
         return self
 
 
-class SQLAlchemyModelRepository(BaseSQLAlchemyRepository, Generic[M]):
+class SQLAlchemyModelRepository(
+    BaseSQLAlchemyRepository, AbstractRepository, Generic[M]
+):
     """Base class which provides both SQLAlchemy core (with bound model) and session interfaces"""
 
     supports_on_conflict: bool = False
@@ -169,18 +179,20 @@ class SQLAlchemyModelRepository(BaseSQLAlchemyRepository, Generic[M]):
             self._stmt = query
         return await super().scalars(*args, **kwargs)
 
+    async def list(self, *args, **kwargs) -> list[E]:
+        return await self.filter(*args).filter_by(**kwargs).all()
+
     def update(self, values=None, **kwargs):  # type: ignore
         return super().update(self.model, values, **kwargs)
 
     def insert(self, values=None, return_results: bool = True, ignore_conflicts: bool = False, index_where=None, **kwargs):  # type: ignore[override]
         super().insert(self.model, values, return_results=return_results, **kwargs)
 
-        if self.supports_on_conflict:
-            if ignore_conflicts:
-                self._stmt = self._stmt.on_conflict_do_nothing(
-                    index_elements=self.on_conflict["index_elements"],
-                    index_where=index_where,
-                )
+        if self.supports_on_conflict and ignore_conflicts:
+            self._stmt = self._stmt.on_conflict_do_nothing(
+                index_elements=self.on_conflict["index_elements"],
+                index_where=index_where,
+            )
         return self
 
     def delete(self, *args, **kwargs):
@@ -209,3 +221,13 @@ class SQLAlchemyModelRepository(BaseSQLAlchemyRepository, Generic[M]):
             kwargs["set_"] = {k: getattr(self._stmt.excluded, k) for k in set_}
         self._stmt = self._stmt.on_conflict_do_update(**kwargs)
         return self
+
+    async def paginate(self, *args, offset: int = 0, limit: int = 100, **kwargs):
+        return (
+            await self.select()
+            .filter(*args)
+            .filter_by(**kwargs)
+            .offset(offset)
+            .limit(limit)
+            .all()
+        )

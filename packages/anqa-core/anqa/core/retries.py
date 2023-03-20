@@ -5,7 +5,7 @@ import functools
 import time
 
 
-async def _retry_async(func, max_retries, backoff):
+def _retry_async(func, max_retries, backoff):
     @functools.wraps(func)
     async def wrapper(*args, **kwargs):
         exc = None

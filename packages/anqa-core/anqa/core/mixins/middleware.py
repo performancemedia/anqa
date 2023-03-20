@@ -26,14 +26,14 @@ class AbstractDispatcher(ABC):
         await self.dispatch(f"after_{event}", *args, **kwargs)
 
 
-class MiddlewareDispatcherMixin(AbstractDispatcher, LoggerMixin, Generic[M]):
+class MiddlewareDispatcherMixin(Generic[M], AbstractDispatcher, LoggerMixin):
     reraise = _NoExc
     default_middlewares: list[M] = []
 
     def __init__(
         self, *, middlewares: list[M] | None = None, dispatch_prefix: str = "", **kwargs
     ):
-        super.__init__(**kwargs)
+        super().__init__(**kwargs)
         self.middlewares: list[M | type[M]] = []
         self._dispatch_prefix = dispatch_prefix
         for m in middlewares or self.default_middlewares:

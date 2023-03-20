@@ -1,3 +1,4 @@
+from ._version import __version__
 from .factory import DB
 from .function_elements import (
     GenerateUUID,
@@ -7,9 +8,10 @@ from .function_elements import (
 )
 from .orm import Base, ORMModel
 from .repository import BaseSQLAlchemyRepository, SQLAlchemyModelRepository
-from .sql_types import JSON, UUID, Pydantic
+from .types import JSON, UUID, Pydantic
 
 __all__ = [
+    "__version__",
     "Base",
     "ORMModel",
     "GenerateUUID",

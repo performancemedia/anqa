@@ -1,7 +1,7 @@
-from pydantic import Field, PyObject
+from pydantic import Field
 
 from anqa.core.settings import BaseSettings
-from anqa.core.utils.json import json_dumps, json_loads
+from anqa.core.utils.imports import ImportedType
 
 
 class DatabaseSettings(BaseSettings):
@@ -10,9 +10,15 @@ class DatabaseSettings(BaseSettings):
     echo_pool: bool = Field(True, env="ECHO_POOL")
     max_overflow: int = Field(0, env="MAX_OVERFLOW")
     pool_recycle: int = Field(3600, env="POOL_RECYCLE")
-    poolclass: PyObject = "sqlalchemy.AsyncAdaptedQueuePool"
-    json_serializer = json_dumps
-    json_deserializer = json_loads
+    poolclass: ImportedType = Field(
+        "sqlalchemy:AsyncAdaptedQueuePool", env="POOL_CLASS"
+    )
+    json_serializer: ImportedType = Field(
+        "anqa.core.utils.json:json_dumps", env="JSON_SERIALIZER"
+    )
+    json_deserializer: ImportedType = Field(
+        "anqa.core.utils.json:json_loads", env="JSON_DESERIALIZER"
+    )
 
     class Config:
         env_prefix = "DATABASE_"

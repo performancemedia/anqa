@@ -19,8 +19,6 @@ from typing import (
 
 from fastapi import Depends, Request, Response
 from fastapi.responses import JSONResponse
-from packages.rest.errors import errors
-from packages.rest.serializer import Serializer
 from starlette.status import (
     HTTP_200_OK,
     HTTP_201_CREATED,
@@ -28,6 +26,9 @@ from starlette.status import (
     HTTP_404_NOT_FOUND,
     HTTP_422_UNPROCESSABLE_ENTITY,
 )
+
+from anqa.rest.errors import errors
+from anqa.rest.serializer import Serializer
 
 from .functools import VIEWSET_ROUTE_FLAG
 from .mixins import DetailViewMixin, ErrorHandlerMixin

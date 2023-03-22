@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from typing import Any
 
-from fastapi import FastAPI
+from fastapi import APIRouter, FastAPI
 
 from anqa.core.abc.service import AbstractSideService
 from anqa.core.utils.class_utils import get_kwargs
 
-from .errors.handlers import add_error_handlers
+from .errors import add_error_handlers
 from .openapi import simplify_operation_ids
 from .prometheus import add_prometheus_middleware
 from .settings import ApiSettings
@@ -23,10 +23,10 @@ def add_side_service(app: FastAPI, service: AbstractSideService):
 
 
 def create_fastapi_app(
-    settings: ApiSettings | type[ApiSettings] = ApiSettings, **kwargs: Any
+    settings: ApiSettings = None, routers: list[APIRouter] | None = None, **kwargs: Any
 ) -> FastAPI:
-    if isinstance(settings, type):
-        settings = settings(**kwargs)
+    if settings is None:
+        settings = ApiSettings()
     kw = {**settings.dict(), **kwargs}
     filtered_kw = get_kwargs(FastAPI, kw)
     app = FastAPI(**filtered_kw)
@@ -34,7 +34,8 @@ def create_fastapi_app(
     add_prometheus_middleware(app)
     for side_service in settings.side_services:
         add_side_service(app, side_service)
-    for router in settings.routers:
-        app.include_router(router)
-    app.on_event("startup")(simplify_operation_ids)
+    if routers:
+        for router in routers:
+            app.include_router(router)
+        simplify_operation_ids(app)
     return app

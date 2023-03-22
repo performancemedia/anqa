@@ -4,7 +4,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import declared_attr
 
 from .function_elements import GenerateUUID
-from .sql_types import UUID
+from .types import UUID
 
 
 class UUIDModelMixin:

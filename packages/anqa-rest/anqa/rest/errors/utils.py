@@ -24,3 +24,12 @@ def find_model_for_exc(exc: str) -> type[ErrorDetails] | None:
         if exc == e:
             return m
     return None
+
+
+def errors(*statuses: int):
+    models_by_status = {m.get_status(): m for m in CORE_TO_MODELS_MAP.values()}
+    models = {}
+    for status in statuses:
+        model = models_by_status.get(status, ErrorDetails)
+        models[status] = {"model": model}
+    return models

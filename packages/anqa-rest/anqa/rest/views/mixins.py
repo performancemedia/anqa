@@ -4,8 +4,7 @@ from fastapi import Request
 from starlette.status import HTTP_400_BAD_REQUEST
 
 from anqa.core.exceptions import NotFound
-
-from ..exc import APIError
+from anqa.rest.errors.exceptions import APIError
 
 
 class DetailViewMixin:

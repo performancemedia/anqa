@@ -26,9 +26,11 @@ ormsgpack = {version = "^1.2.5", optional = true}
 aio-pika = {version = ">=9.0.4", optional = true}
 nats-py = {version = ">=2.2,<3.0", optional = true}
 aiokafka = {version = ">=0.8,<1.0", optional = true}
+aioredis = {version = "^2.0.1", optional = true}
+gcloud-aio-pubsub = {version = "^5.2.0", optional = true}
 
 [tool.poetry.extras]
-all = ["aiorun", "typer", "nats-py", "aiokafka", "aio-pika", "ormsgpack"]
+all = ["aiorun", "typer", "nats-py", "aiokafka", "aio-pika", "ormsgpack", "aioredis", "gcloud-aio-pubsub"]
 cli = ["aiorun", "typer"]
 
 # backends
@@ -36,6 +38,8 @@ cli = ["aiorun", "typer"]
 nats = ["nats-py"]
 kafka = ["aiokafka"]
 rabbitmq = ["aio-pika"]
+redis = ["aioredis"]
+pubsub = ["gcloud-aio-pubsub"]
 
 # encoders
 msgpack = ["ormsgpack"]

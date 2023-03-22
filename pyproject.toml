@@ -51,6 +51,13 @@ exclude = "tests"
 [tool.isort]
 profile = "black"
 
+[tool.coverage.report]
+exclude_lines = [
+   "pragma: no cover",
+   "if TYPE_CHECKING:",
+   "raise NotImplementedError"
+]
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

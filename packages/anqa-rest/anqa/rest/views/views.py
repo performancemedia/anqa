@@ -19,8 +19,8 @@ from typing import (
 
 from fastapi import Depends, Request, Response
 from fastapi.responses import JSONResponse
-from packages.rest.errors import errors
-from packages.rest.serializer import Serializer
+from anqa.rest.errors.exceptions import errors
+from anqa.rest.serializer import Serializer
 from starlette.status import (
     HTTP_200_OK,
     HTTP_201_CREATED,

@@ -36,5 +36,6 @@ def create_fastapi_app(
         add_side_service(app, side_service)
     for router in settings.routers:
         app.include_router(router)
-    app.on_event("startup")(simplify_operation_ids)
+    app.on_event("startup")
+    simplify_operation_ids(app)
     return app

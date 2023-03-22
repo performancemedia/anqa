@@ -16,5 +16,6 @@ class APIError(Exception):
         self.title = title or self.__doc__ or type(self).__name__
         self.instance = instance
 
+
 def errors(*statuses: int):
     return {s: {"model": ErrorDetails} for s in statuses}

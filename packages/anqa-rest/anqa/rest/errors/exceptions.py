@@ -3,6 +3,7 @@ from __future__ import annotations
 from starlette.status import HTTP_400_BAD_REQUEST
 from anqa.rest.errors.models import ErrorDetails
 
+
 class APIError(Exception):
     def __init__(
         self,

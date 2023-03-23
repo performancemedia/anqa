@@ -4,8 +4,9 @@ on:
   push:
     branches:
       - release/*
-    paths: packages/anqa-cli/_version.py
-  workflow_dispatch: {}
+    paths:
+      - 'packages/anqa-cli/_version.py'
+    workflow_dispatch:
 
 jobs:
   release-anqa-cli:

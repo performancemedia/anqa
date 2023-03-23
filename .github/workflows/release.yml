@@ -35,4 +35,4 @@ jobs:
         uses: pypa/gh-action-pypi-publish@v1.5.1
         with:
           password: ${{ secrets.PYPI_TOKEN }}
-          packages-dir: ${{ inputs.working-directory }}/dist
+          packages_dir: ${{ inputs.working-directory }}/dist

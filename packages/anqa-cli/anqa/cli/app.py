@@ -3,6 +3,7 @@ from typing import Optional
 import typer
 from questionary.form import form
 
+from ._version import __version__
 from .enum import CreateEnum, PackageEnum, PythonVersion, YesNoEnum
 from .generator import fill_template
 from .helpers import binary_question, question
@@ -10,7 +11,7 @@ from .utils import call_command
 
 cli = typer.Typer(
     add_completion=True,
-    help="Boostrap Anqa based projects in seconds!",
+    help=f"Boostrap Anqa based projects in seconds! v{__version__}",
     name="Anqa CLI",
 )
 

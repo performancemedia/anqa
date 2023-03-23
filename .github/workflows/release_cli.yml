@@ -1,13 +1,13 @@
 name: Release anqa-cli
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
       - release/*
     paths:
       - 'packages/anqa-cli/_version.py'
-    workflow_dispatch:
 
 jobs:
   release-anqa-cli:

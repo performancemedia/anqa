@@ -3,9 +3,10 @@ name: Release anqa-db
 on:
   push:
     branches:
+      - main
       - release/*
     paths: packages/anqa-db/_version.py
-  workflow_dispatch: {}
+  workflow_dispatch:
 
 jobs:
   release-anqa-db:

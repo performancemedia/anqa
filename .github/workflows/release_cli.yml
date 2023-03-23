@@ -3,6 +3,7 @@ name: Release anqa-cli
 on:
   push:
     branches:
+      - main
       - release/*
     paths:
       - 'packages/anqa-cli/_version.py'

@@ -3,8 +3,10 @@ name: Release anqa-core
 on:
   push:
     branches:
+      - main
       - release/*
     paths: packages/anqa-core/_version.py
+    workflow_dispatch:
 
 jobs:
   release-anqa-core:

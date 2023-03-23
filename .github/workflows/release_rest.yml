@@ -3,9 +3,10 @@ name: Release anqa-rest
 on:
   push:
     branches:
+      - main
       - release/*
     paths: packages/anqa-rest/_version.py
-  workflow_dispatch: {}
+  workflow_dispatch:
 
 jobs:
   release-anqa-rest:

@@ -3,9 +3,10 @@ name: Release anqa-events
 on:
   push:
     branches:
+      - main
       - release/*
     paths: packages/anqa-events/_version.py
-  workflow_dispatch: {}
+  workflow_dispatch:
 
 jobs:
   release-anqa-events:

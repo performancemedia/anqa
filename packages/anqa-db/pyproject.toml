@@ -10,6 +10,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = ">=3.8.1,<4.0"
+anqa-core = "==0.0.1"
 sqlalchemy = "^2.0.6"
 alembic = "^1.10.2"
 asyncpg = "^0.27.0"

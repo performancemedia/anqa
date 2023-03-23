@@ -1,0 +1,6 @@
+{
+  "project_name": "{{ cookiecutter.project_name }}",
+  "python": "{{ cookiecutter.python }}",
+  "docker": "{{ cookiecutter.docker }}",
+  "pre_commit": "{{ cookiecutter.pre_commit }}"
+}

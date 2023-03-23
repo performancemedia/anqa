@@ -29,6 +29,7 @@ def FromSettings(settings_cls: Type[ObjectSettings], **kwargs: Any):
 
 
 class AppSettings(BaseSettings):
+    env: str = Field("dev", env="ENV")
     name: str = "app"
     version: str = "0.1.0"
     title: Optional[str]

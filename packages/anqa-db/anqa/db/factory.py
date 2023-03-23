@@ -15,7 +15,7 @@ from sqlalchemy.ext.asyncio import (
 
 from anqa.core.utils.class_utils import Singleton
 
-from . import Base
+from .orm import Base
 from .repository import SQLAlchemyModelRepository
 from .settings import DatabaseSettings
 

@@ -1,0 +1,19 @@
+version: '3'
+
+vars:
+  REGISTRY: localhost:5005
+  APP_NAME: {{cookiecutter.project_name}}
+
+tasks:
+  build-dev:
+    desc: Build target
+    cmds:
+      - docker build --no-cache -t {{ "{{" }}.REGISTRY{{ "}}" }}/{{ "{{" }}.APP_NAME{{ "}}" }}:latest --target={{ "{{" }}.APP_NAME{{ "}}" }}-dev .
+  test:
+    desc: Running all tests
+    cmds:
+      - pytest -v
+  cov:
+    desc: Generate coverage report in html
+    cmds:
+      - coverage html

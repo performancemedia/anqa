@@ -1,0 +1,7 @@
+from anqa.rest.routers import ViewRouter
+
+from .views import FeatureViews
+
+router = ViewRouter(prefix="/{{cookiecutter.feature}}")
+
+router.register_view(FeatureViews)

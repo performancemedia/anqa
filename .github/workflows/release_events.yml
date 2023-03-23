@@ -1,0 +1,16 @@
+name: Release anqa-events
+
+on:
+  push:
+    branches:
+      - release/*
+    paths: packages/anqa-events/_version.py
+  workflow_dispatch: {}
+
+jobs:
+  release-anqa-events:
+    uses:
+      ./.github/workflows/release.yml
+    with:
+      working-directory: packages/anqa-events
+    secrets: inherit

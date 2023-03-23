@@ -1,0 +1,16 @@
+name: Release anqa-db
+
+on:
+  push:
+    branches:
+      - release/*
+    paths: packages/anqa-db/_version.py
+  workflow_dispatch: {}
+
+jobs:
+  release-anqa-db:
+    uses:
+      ./.github/workflows/release.yml
+    with:
+      working-directory: packages/anqa-db
+    secrets: inherit

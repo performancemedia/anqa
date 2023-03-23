@@ -1,0 +1,16 @@
+name: Release anqa-rest
+
+on:
+  push:
+    branches:
+      - release/*
+    paths: packages/anqa-rest/_version.py
+  workflow_dispatch: {}
+
+jobs:
+  release-anqa-rest:
+    uses:
+      ./.github/workflows/release.yml
+    with:
+      working-directory: packages/anqa-rest
+    secrets: inherit

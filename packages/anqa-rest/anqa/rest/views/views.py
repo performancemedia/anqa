@@ -18,7 +18,6 @@ from typing import (
 )
 
 from fastapi import Depends, Request, Response
-from fastapi.responses import JSONResponse
 from starlette.status import (
     HTTP_200_OK,
     HTTP_201_CREATED,
@@ -28,6 +27,7 @@ from starlette.status import (
 )
 
 from anqa.rest.errors import errors
+from anqa.rest.response import JsonResponse
 from anqa.rest.serializer import Serializer
 
 from .functools import VIEWSET_ROUTE_FLAG
@@ -41,7 +41,7 @@ L = TypeVar("L", bound=Union[AsyncIterable[Any], Iterable[Any]])
 
 class View(ABC):
     api_component_name: str
-    default_response_class: Type[Response] = JSONResponse
+    default_response_class: Type[Response] = JsonResponse
 
     def __init__(self, request: Request, response: Response):
         super().__init__()

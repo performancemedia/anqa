@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Generic, TypeVar
+from typing import Any, Generic, TypeVar
 
 from anqa.core.types import ID
 
@@ -10,11 +10,15 @@ E = TypeVar("E")
 
 class AbstractRepository(ABC, Generic[E]):
     @abstractmethod
-    async def add(self, entity: E) -> E:
+    async def get(self, pk: ID) -> E | None:
         raise NotImplementedError
 
     @abstractmethod
-    async def get(self, pk: ID) -> E | None:
+    async def retrieve(self, *args, **kwargs) -> E | None:
+        raise NotImplementedError
+
+    @abstractmethod
+    async def create(self, *args, **kwargs) -> E:
         raise NotImplementedError
 
     @abstractmethod
@@ -22,9 +26,13 @@ class AbstractRepository(ABC, Generic[E]):
         raise NotImplementedError
 
     @abstractmethod
+    async def partial_update(self, *args, **kwargs):
+        raise NotImplementedError
+
+    @abstractmethod
     async def delete(self, *args, **kwargs) -> None:
         raise NotImplementedError
 
     @abstractmethod
-    async def list(self, *args, **kwargs) -> list[E]:
+    async def list(self, *args, **kwargs) -> list[Any]:
         raise NotImplementedError

@@ -1,16 +1,13 @@
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
-from typing import Any, Generic, Sequence, Type, TypeVar
+from typing import Any
 
 import sqlalchemy as sa
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import DeclarativeBase
 from typing_extensions import TypedDict
 
 from anqa.core.abc.repository import AbstractRepository, E
-
-M = TypeVar("M", bound=Type[DeclarativeBase])
 
 
 class OnConflict(TypedDict, total=False):
@@ -75,12 +72,6 @@ class BaseSQLAlchemyRepository:
         async with self.session.begin():
             yield
 
-    def add(self, instance) -> None:
-        self.session.add(instance)
-
-    def add_all(self, instances) -> None:
-        self.session.add_all(instances)
-
     async def execute(self, *args, **kwargs):
         if len(args) == 0:
             args = (self._stmt,)
@@ -89,13 +80,13 @@ class BaseSQLAlchemyRepository:
     async def scalars(self, *args, **kwargs):
         return (await self.session.execute(self._stmt, *args, **kwargs)).scalars()
 
-    async def all(self, *args, **kwargs) -> Sequence[M]:
+    async def all(self, *args, **kwargs):
         return (await self.scalars(*args, **kwargs)).all()
 
-    async def one(self, *args, **kwargs) -> M:
+    async def one(self, *args, **kwargs) -> E:
         return (await self.scalars(*args, **kwargs)).one()
 
-    async def one_or_none(self, *args, **kwargs) -> M | None:
+    async def one_or_none(self, *args, **kwargs) -> E | None:
         return (await self.scalars(*args, **kwargs)).one_or_none()
 
     get = one_or_none
@@ -141,14 +132,12 @@ class BaseSQLAlchemyRepository:
         return self
 
 
-class SQLAlchemyModelRepository(
-    BaseSQLAlchemyRepository, AbstractRepository, Generic[M]
-):
+class SQLAlchemyModelRepository(BaseSQLAlchemyRepository, AbstractRepository):
     """Base class which provides both SQLAlchemy core (with bound model) and session interfaces"""
 
     supports_on_conflict: bool = False
 
-    model: M
+    model: E
     order_by: Any | None = None
 
     def __init_subclass__(cls, **kwargs):
@@ -179,8 +168,17 @@ class SQLAlchemyModelRepository(
             self._stmt = query
         return await super().scalars(*args, **kwargs)
 
+    def filter(self, *args, **kwargs):
+        if self._stmt is None:
+            query = self._select(self.model)
+            if self.order_by is not None:
+                query = query.order_by(self.order_by)
+            query = query.filter(*args).filter_by(**kwargs)
+            self._stmt = query
+        return self
+
     async def list(self, *args, **kwargs) -> list[E]:
-        return await self.filter(*args).filter_by(**kwargs).all()
+        return await self.filter(*args, **kwargs).all()
 
     def update(self, values=None, **kwargs):  # type: ignore
         return super().update(self.model, values, **kwargs)
@@ -194,6 +192,8 @@ class SQLAlchemyModelRepository(
                 index_where=index_where,
             )
         return self
+
+    create = insert
 
     def delete(self, *args, **kwargs):
         return super().delete(self.model, *args, **kwargs)
@@ -223,11 +223,9 @@ class SQLAlchemyModelRepository(
         return self
 
     async def paginate(self, *args, offset: int = 0, limit: int = 100, **kwargs):
-        return (
-            await self.select()
-            .filter(*args)
-            .filter_by(**kwargs)
-            .offset(offset)
-            .limit(limit)
-            .all()
-        )
+        return await self.filter(*args, **kwargs).offset(offset).limit(limit).all()
+
+    async def retrieve(self, *args, **kwargs) -> E | None:
+        return await self._filter(*args, **kwargs).one_or_none()
+
+    partial_update = update

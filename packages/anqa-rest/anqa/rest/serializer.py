@@ -8,8 +8,8 @@ from anqa.core.schema import BaseSchema
 class Serializer(BaseSchema):
     @classmethod
     async def serialize(cls, obj: Any):
-        if isinstance(obj, cls):
-            return cls
+        if isinstance(obj, Serializer):
+            return obj
         if isinstance(obj, dict):
             return cls.parse_obj(obj)
         if isinstance(obj, AsyncIterable):

@@ -1,5 +1,8 @@
 name: Test
-on: [push, pull_request]
+on:
+  pull_request:
+    types: [opened, reopened]
+  push:
 jobs:
   lint:
     runs-on: ubuntu-20.04

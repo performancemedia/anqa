@@ -1,0 +1,18 @@
+name: Release anqa-cli
+
+on:
+  push:
+    branches:
+      - main
+      - release/*
+    paths:
+      - 'packages/anqa-cli/_version.py'
+    workflow_dispatch:
+
+jobs:
+  release-anqa-cli:
+    uses:
+      ./.github/workflows/release.yml
+    with:
+      working-directory: packages/anqa-cli
+    secrets: inherit

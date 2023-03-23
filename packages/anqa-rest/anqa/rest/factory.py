@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Any
+from itertools import chain
+from typing import Any, Sequence
 
 from fastapi import APIRouter, FastAPI
 
@@ -23,10 +24,14 @@ def add_side_service(app: FastAPI, service: AbstractSideService):
 
 
 def create_fastapi_app(
-    settings: ApiSettings = None, routers: list[APIRouter] | None = None, **kwargs: Any
+    settings: ApiSettings | type[ApiSettings] | None = None,
+    routers: Sequence[APIRouter] = (),
+    **kwargs: Any,
 ) -> FastAPI:
     if settings is None:
         settings = ApiSettings()
+    elif isinstance(settings, type):
+        settings = settings()
     kw = {**settings.dict(), **kwargs}
     filtered_kw = get_kwargs(FastAPI, kw)
     app = FastAPI(**filtered_kw)
@@ -34,8 +39,8 @@ def create_fastapi_app(
     add_prometheus_middleware(app)
     for side_service in settings.side_services:
         add_side_service(app, side_service)
-    if routers:
-        for router in routers:
-            app.include_router(router)
-        simplify_operation_ids(app)
+    for router in chain(routers, settings.routers):
+        app.include_router(router)
+
+    simplify_operation_ids(app)
     return app

@@ -1,0 +1,56 @@
+version: "3.8"
+
+x-env: &env
+  TERM: "xterm-256color"
+  ENV: DEV
+  DATABASE_URL: "postgresql+asyncpg://postgres:postgres@postgres:5432/postgres"
+
+services:
+  # ---- storage & brokers -----
+  nats:
+    hostname: nats
+    image: nats:latest
+    command: "-js"
+    volumes:
+      - "./volumes/nats/tmp:/tmp/nats/jetstream"
+      - "./volumes/nats/data:/data"
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+  postgres:
+    hostname: postgres
+    image: postgres:12
+    command: ["postgres", "-c", "log_statement=all"] # dev only
+    volumes:
+      - pg:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: bp
+    ports:
+      - "5432:5432"
+  # ---- app ----
+  tyr:
+    tty: true
+    build:
+      context: .
+      dockerfile: ./.docker/images/dev/Dockerfile
+    command: uvicorn tyr.app:app --host=0.0.0.0 --port 8000 --reload --http h11 --loop uvloop --log-level info
+    restart: unless-stopped
+    environment:
+      <<: *env
+    volumes:
+      - ./tyr:/app/tyr
+      - ./migrations:/app/migrations
+      - ./tests:/app/tests
+      - ./yggdrasil/core:/app/yggdrasil/core
+      - ./yggdrasil/manifests:/manifests
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - nats
+volumes:
+  pg:

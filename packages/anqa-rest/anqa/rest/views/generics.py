@@ -7,8 +7,8 @@ from starlette.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT
 
 from anqa.core.abc.repository import AbstractRepository
 from anqa.core.exceptions import NotFound
+from anqa.rest.serializer import Serializer
 
-from .serializer import Serializer
 from .views import (
     CreateAPIView,
     DestroyAPIView,

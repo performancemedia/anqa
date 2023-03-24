@@ -15,18 +15,6 @@ class StrEnum(str, Enum, metaclass=BaseEnumMeta):
     pass
 
 
-class YesNoEnum(str, Enum):
-    yes = "yes"
-    no = "no"
-
-    def __bool__(self):
-        return self.value == "yes"
-
-    @classmethod
-    def from_bool(cls, value):
-        return cls.yes if value else cls.no
-
-
 class PythonVersion(StrEnum):
     PY3_7 = "3.7"
     PY3_8 = "3.8"

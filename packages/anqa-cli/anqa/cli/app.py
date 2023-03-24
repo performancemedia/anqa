@@ -4,33 +4,32 @@ import typer
 from questionary.form import form
 
 from ._version import __version__
-from .enum import CreateEnum, PackageEnum, PythonVersion, YesNoEnum
+from .enum import CreateEnum, PackageEnum, PythonVersion, StrEnum
 from .generator import fill_template
 from .helpers import binary_question, question
 from .utils import call_command
 
 cli = typer.Typer(
     add_completion=True,
-    help=f"Boostrap Anqa based projects in seconds! v{__version__}",
+    help="Boostrap Anqa based projects in seconds!",
     name="Anqa CLI",
 )
 
 
 @cli.command(help="Show hello message")
-def hello():
-    typer.secho("Hello", fg="green")
+def version():
+    typer.secho(f"Anqa CLI v{__version__}", fg="green")
 
 
 @cli.command(help="Create new Anqa project")
 def startproject(
     project: str,
-    interactive: YesNoEnum = typer.Option(
-        YesNoEnum.yes, help="Run in interactive mode"
-    ),
-    docker: YesNoEnum = typer.Option(YesNoEnum.yes),
-    pre_commit: YesNoEnum = typer.Option(YesNoEnum.yes, "--pre-commit"),
+    interactive: bool = typer.Option(True, help="Run in interactive mode"),
+    docker: bool = typer.Option(True),
+    pre_commit: bool = typer.Option(True, "--pre-commit"),
     python: PythonVersion = typer.Option(PythonVersion.PY3_11),
-    taskfile: YesNoEnum = typer.Option(YesNoEnum.yes),
+    taskfile: bool = typer.Option(True),
+    alembic: bool = typer.Option(True),
 ):
     typer.secho("Creating new...", fg="green")
     if interactive:
@@ -39,6 +38,7 @@ def startproject(
             pre_commit=binary_question("pre commit"),
             docker=binary_question("docker"),
             taskfile=binary_question("taskfile"),
+            alembic=binary_question("alembic"),
         ).ask()
         context = dict(name=project, **result)
     else:
@@ -48,7 +48,11 @@ def startproject(
             pre_commit=pre_commit,
             docker=docker,
             taskfile=taskfile,
+            alembic=alembic,
         )
+    for k, v in context.items():
+        if isinstance(v, StrEnum):
+            context[k] = str(v.value)
     fill_template("project", context)
 
 

@@ -1,5 +1,6 @@
 import json
 import os
+import shutil
 import subprocess  # nosec
 
 
@@ -20,6 +21,6 @@ def remove_paths(paths: list):
         path = os.path.join(base_dir, path)
         if path and os.path.exists(path):
             if os.path.isdir(path):
-                os.rmdir(path)
+                shutil.rmtree(path, ignore_errors=True)
             else:
                 os.unlink(path)

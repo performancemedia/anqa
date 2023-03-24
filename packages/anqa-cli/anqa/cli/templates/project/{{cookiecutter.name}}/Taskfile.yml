@@ -2,7 +2,7 @@ version: '3'
 
 vars:
   REGISTRY: localhost:5005
-  APP_NAME: {{cookiecutter.project_name}}
+  APP_NAME: {{cookiecutter.name}}
 
 tasks:
   build-dev:

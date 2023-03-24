@@ -9,7 +9,7 @@ repos:
     rev: 3.9.2
     hooks:
       - id: flake8
-        args: ["--count", "--max-complexity", "10", "--statistics", "--exclude=.venv/","./{{ cookiecutter.project_name }}"]
+        args: ["--count", "--max-complexity", "10", "--statistics", "--exclude=.venv/","./{{ cookiecutter.name }}"]
 
   - repo: https://github.com/asottile/yesqa
     rev: v1.2.3
@@ -41,7 +41,7 @@ repos:
     rev: 1.7.4
     hooks:
     - id: bandit
-      args: ["--skip", "B101", "-r", "./{{ cookiecutter.project_name }}"]
+      args: ["--skip", "B101", "-r", "./{{ cookiecutter.name }}"]
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v0.961

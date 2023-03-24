@@ -18,4 +18,4 @@ def fill_template(template_name: str, context: dict[str, Any]):
     except OutputDirExistsException:
         typer.echo(f"Folder {context['name']} already exists. 😞")
     else:
-        typer.echo(f"FastAPI {template_name} created successfully! 🎉")
+        typer.echo(f"{template_name.title()} created successfully! 🎉")

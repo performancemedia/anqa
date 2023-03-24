@@ -279,7 +279,7 @@ tz = ["python-dateutil"]
 
 [[package]]
 name = "anqa-cli"
-version = "0.0.2"
+version = "0.0.3"
 description = ""
 category = "main"
 optional = false

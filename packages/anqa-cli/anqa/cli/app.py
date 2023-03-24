@@ -4,7 +4,7 @@ import typer
 from questionary.form import form
 
 from ._version import __version__
-from .enum import CreateEnum, PackageEnum, PythonVersion, StrEnum
+from .enum import CreateEnum, PackageEnum, Python, StrEnum
 from .generator import fill_template
 from .helpers import binary_question, question
 from .utils import call_command
@@ -27,14 +27,14 @@ def startproject(
     interactive: bool = typer.Option(True, help="Run in interactive mode"),
     docker: bool = typer.Option(True),
     pre_commit: bool = typer.Option(True, "--pre-commit"),
-    python: PythonVersion = typer.Option(PythonVersion.PY3_11),
+    python: Python = typer.Option(Python.v3_11),
     taskfile: bool = typer.Option(True),
     alembic: bool = typer.Option(True),
 ):
     typer.secho("Creating new...", fg="green")
     if interactive:
         result = form(
-            python=question(PythonVersion),
+            python=question(Python),
             pre_commit=binary_question("pre commit"),
             docker=binary_question("docker"),
             taskfile=binary_question("taskfile"),
@@ -67,12 +67,13 @@ def add(
     extras: Optional[str] = typer.Option(None, "--extras"),
 ):
     command = ["poetry", "add"]
+    package_name = f"anqa-{package.value}"
     if extras:
-        command.append(f"'{package}[{extras}]'")
+        command.append(f"'{package_name}[{extras}]'")
     else:
-        command.append(package)
+        command.append(package_name)
 
     for cmd in (command, ["poetry", "lock"], ["poetry", "install"]):
         call_command(cmd)
 
-    typer.secho(f"Successfully installed {package.value}")
+    typer.secho(f"Successfully installed {package_name}")

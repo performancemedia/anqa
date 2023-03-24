@@ -15,19 +15,18 @@ class StrEnum(str, Enum, metaclass=BaseEnumMeta):
     pass
 
 
-class PythonVersion(StrEnum):
-    PY3_7 = "3.7"
-    PY3_8 = "3.8"
-    PY3_9 = "3.9"
-    PY3_10 = "3.10"
-    PY3_11 = "3.11"
+class Python(StrEnum):
+    v38 = "3.8"
+    v39 = "3.9"
+    v3_10 = "3.10"
+    v3_11 = "3.11"
 
 
 class PackageEnum(StrEnum):
-    core = "anqa-core"
-    db = "anqa-db"
-    events = "anqa-events"
-    rest = "anqa-rest"
+    core = "core"
+    db = "db"
+    events = "events"
+    rest = "rest"
 
 
 class CreateEnum(StrEnum):

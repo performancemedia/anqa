@@ -36,16 +36,16 @@ COPY ./poetry.lock ./pyproject.toml ./
 
 RUN poetry install --only main
 
-FROM python-base AS {{cookiecutter.project_name}}-dev
+FROM python-base AS {{cookiecutter.name}}-dev
 
 COPY --from=python-base /app /app
-COPY ./{{cookiecutter.project_name}} .
+COPY ./{{cookiecutter.name}} .
 
 EXPOSE 8000
-# CMD ["uvicorn", "{{cookiecutter.project_name}}.api.asgi:app", "--host", "0.0.0.0", "--port", "8000", "--http", "h11", "--log-level", "info"]
+# CMD ["uvicorn", "{{cookiecutter.name}}.api.asgi:app", "--host", "0.0.0.0", "--port", "8000", "--http", "h11", "--log-level", "info"]
 
 
-FROM {{cookiecutter.project_name}}-dev AS {{cookiecutter.project_name}}-test
+FROM {{cookiecutter.name}}-dev AS {{cookiecutter.name}}-test
 
 COPY --from=python-base /app /app
 COPY .flake8 ./tests ./

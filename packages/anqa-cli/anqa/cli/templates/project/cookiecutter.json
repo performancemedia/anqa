@@ -1,6 +1,8 @@
 {
-  "project_name": "{{ cookiecutter.project_name }}",
+  "name": "{{ cookiecutter.name }}",
   "python": "{{ cookiecutter.python }}",
   "docker": "{{ cookiecutter.docker }}",
-  "pre_commit": "{{ cookiecutter.pre_commit }}"
+  "pre_commit": "{{ cookiecutter.pre_commit }}",
+  "alembic": "{{ cookiecutter.alembic }}",
+  "taskfile": "{{ cookiecutter.taskfile }}"
 }

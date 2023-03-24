@@ -3,8 +3,6 @@ from typing import TypeVar
 
 import questionary
 
-from anqa.cli.enum import YesNoEnum
-
 EnumType = TypeVar("EnumType")
 
 
@@ -18,5 +16,4 @@ def question(choices: EnumType) -> questionary.Question:
 
 
 def binary_question(option: str) -> questionary.Question:
-    res = questionary.confirm(f"Do you want {option}?", default=False)
-    return YesNoEnum.from_bool(res)
+    return questionary.confirm(f"Do you want {option}?", default=True)

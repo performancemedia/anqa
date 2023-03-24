@@ -4,6 +4,7 @@ x-env: &env
   TERM: "xterm-256color"
   ENV: DEV
   DATABASE_URL: "postgresql+asyncpg://postgres:postgres@postgres:5432/postgres"
+  BROKER_URL: "nats://nats:4222"
 
 services:
   # ---- storage & brokers -----
@@ -11,16 +12,16 @@ services:
     hostname: nats
     image: nats:latest
     command: "-js"
-    volumes:
-      - "./volumes/nats/tmp:/tmp/nats/jetstream"
-      - "./volumes/nats/data:/data"
     ports:
       - "4222:4222"
       - "8222:8222"
+    volumes:
+      - nats:/tmp/nats/jetstream
+      - nats:/data
+
   postgres:
     hostname: postgres
     image: postgres:12
-    command: ["postgres", "-c", "log_statement=all"] # dev only
     volumes:
       - pg:/var/lib/postgresql/data
     environment:
@@ -28,29 +29,27 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
-      POSTGRES_DB: bp
+      POSTGRES_DB: postgres
     ports:
       - "5432:5432"
-  # ---- app ----
-  tyr:
+  api:
     tty: true
     build:
       context: .
       dockerfile: ./.docker/images/dev/Dockerfile
-    command: uvicorn tyr.app:app --host=0.0.0.0 --port 8000 --reload --http h11 --loop uvloop --log-level info
+    command: uvicorn {{cookiecutter.name}}.api.asgi:app --host=0.0.0.0 --port 8000 --reload --http h11 --loop uvloop --log-level info
     restart: unless-stopped
     environment:
       <<: *env
     volumes:
-      - ./tyr:/app/tyr
-      - ./migrations:/app/migrations
+      - ./{{cookiecutter.name}}:/app/{{cookiecutter.name}}
       - ./tests:/app/tests
-      - ./yggdrasil/core:/app/yggdrasil/core
-      - ./yggdrasil/manifests:/manifests
     ports:
       - "8000:8000"
     depends_on:
       - postgres
       - nats
+
 volumes:
-  pg:
+  nats: {}
+  pg: {}

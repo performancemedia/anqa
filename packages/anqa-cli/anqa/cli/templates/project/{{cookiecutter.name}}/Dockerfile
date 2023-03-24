@@ -25,9 +25,11 @@ ENV PATH /app/.venv/bin:$PATH:/home/$USERNAME/.local/bin
 RUN pip install --user -U pip
 RUN curl -sSL https://install.python-poetry.org | python3 -
 
-{% if cookiecutter.alembic == "yes" %}
+{%- if cookiecutter.alembic -%}
+
 COPY ./alembic.ini ./
 COPY ./migrations ./
+{%- else -%}
 
 {% endif %}
 

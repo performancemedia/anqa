@@ -11,7 +11,7 @@ def main():
     if not alembic_enabled:
         remove_paths(["alembic.ini", "migrations"])
     else:
-        call_command(["anqa", "add", "anqa-db"])
+        call_command(["anqa", "add", "db"])
     docker = eval("{{ cookiecutter.docker }}")  # nosec
     if not docker:
         remove_paths(["Dockerfile", "docker-compose.yaml"])
